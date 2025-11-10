@@ -1,18 +1,45 @@
+import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+
+import { createRoom } from "@/lib/api"
+import sanitizeInput from "@/utils/sanitize"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogClose,
-  DialogContent,
+  DialogTitle, 
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
+  DialogContent,
 } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { createId } from '@paralleldrive/cuid2';
 
 const CreateRoom = () => {
+    const [roomName, setRoomName] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate({ from : "/rooms" });
+    
+    const handleCreateRoom = async () => {
+        const sanitizedRoomName = sanitizeInput(roomName);
+        if (sanitizedRoomName.length === 0) {
+            setError("Room name cannot be empty.");
+            setRoomName("");
+            return;
+        }
+        const room = await createRoom(sanitizedRoomName);
+        setRoomName("");
+        navigate({ to: '/rooms/$roomId', params: { roomId: room.id } });
+    }
+
+    const handleRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (error) {
+            setError(null);
+        }
+        setRoomName(e.target.value);
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -27,7 +54,8 @@ const CreateRoom = () => {
                 <div className="grid gap-4">
                     <div className="grid gap-3">
                         <Label htmlFor="roomName">Room Name</Label>
-                        <Input id="roomName" name="roomName" defaultValue={createId()} />
+                        <Input id="roomName" name="roomName" value={roomName} onChange={handleRoomName} />
+                        {error && <p className="text-sm text-red-600">{error}</p>}
                     </div>
                 </div>
 
@@ -35,7 +63,7 @@ const CreateRoom = () => {
                     <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogClose>
-                    <Button type="submit">Create</Button>
+                    <Button onClick={handleCreateRoom}>Create</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

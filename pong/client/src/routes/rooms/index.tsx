@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { getRooms } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -13,12 +13,17 @@ import {
 } from "@/components/ui/input-group"
 
 // @ts-ignore: pathname route is being weird
-export const Route = createFileRoute('/rooms')({
+export const Route = createFileRoute('/rooms/')({
 	component: RoomsComponent,
 })
 
 function RoomsComponent() {
 	const [rooms, setRooms] = useState<RoomSummary[]>([]);
+	const navigate = useNavigate({from: '/rooms/'})
+
+	const joinGame = (roomId: RoomSummary['id']) => () => {
+		navigate({ to: '/rooms/$roomId', params: { roomId } });
+	}
 
 	useEffect(() => {
 			// deno-lint-ignore prefer-const
@@ -30,7 +35,7 @@ function RoomsComponent() {
 	
 					setRooms(response);
 				} catch {
-					setRooms([]);
+					setRooms([])
 				}
 			}
 	
@@ -64,9 +69,9 @@ function RoomsComponent() {
 					<div key={room.id} className="border p-4 rounded-lg mt-4 flex justify-between items-center">
 						<div>
 							<h2 className="text-lg font-semibold">{room.name}</h2>
-							<p className="text-subtle">Players: {room.players}/2</p>
+							<p className="text-subtle">Players: {room.players.length}/2</p>
 						</div>
-						<Button>Join</Button>
+						<Button disabled={room.players.length === 2} onClick={joinGame(room.id)}>Join</Button>
 					</div>
 				)
 			}) : (

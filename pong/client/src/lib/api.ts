@@ -27,20 +27,20 @@ export const getRooms = async (): Promise<RoomSummary[]> => {
 	}
 }
 
-export const createRoom = async (name: string): Promise<RoomSummary> => {
+export const createRoom = async (roomName: string): Promise<RoomSummary> => {
 	try {
 		const response = await fetch('/api/rooms', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ name })
+			body: JSON.stringify({ roomName })
 		});
 		if (!response.ok) {
 			throw new Error(`Error creating room: ${response.statusText}`);
 		}
 		const data: RoomSummary = await response.json();
-		
+
 		return data;
 	} catch (err) {
 		return Promise.reject(err);
