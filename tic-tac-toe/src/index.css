@@ -1,0 +1,91 @@
+:root {
+	font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+}
+
+body {
+	margin: 0;
+	display: grid;
+	place-items: center;
+	min-height: 100dvh;
+	background: hsl(216, 19%, 5%);
+	color: #e7eaee;
+}
+
+.app {
+	width: 360px;
+	max-width: 92vw;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 24px 0;
+}
+
+.title {
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: .3px;
+}
+
+.meta {
+	display: grid;
+	gap: 8px;
+}
+
+.meta small {
+	opacity: 0.7;
+}
+
+.row {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 8px;
+}
+
+.square {
+	aspect-ratio: 1/1;
+	display: grid;
+	place-items: center;
+	font-size: 38px;
+	font-weight: 800;
+	border-radius: 14px;
+	background: #131821;
+	border: 1px solid #1e2633;
+	cursor: pointer;
+	transition: transform 0.04s;
+}
+
+.square:hover {
+	transform: translateY(-1px);
+}
+
+.square.win {
+	background: #142018;
+	border-color: #1e3b27;
+}
+
+.controls {
+	display: flex;
+	gap: 8px;
+	margin: 16px 0 8px;
+}
+
+button {
+	padding: 10px 14px;
+	border-radius: 12px;
+	background: #1a2230;
+	border: 1px solid #273349;
+	color: #e7eaee;
+	cursor: pointer;
+	font-weight: 600;
+}
+
+button:disabled {
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: #162033;
+	border: 1px solid #263a63;
+	font-size: 12px;
+}

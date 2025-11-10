@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "dev": "deno run --watch --allow-net ./src/main.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@/": "./src/",
+    "~/": "../"
+  },
+  "compilerOptions": {
+    "lib": ["deno.ns", "deno.window", "dom"]
+  }
+}
