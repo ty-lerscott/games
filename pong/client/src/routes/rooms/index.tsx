@@ -6,6 +6,7 @@ import { getRooms } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import type { RoomSummary } from '~/types/room';
 import CreateRoom from '@/components/CreateRoom';
+import  { getOrCreateUserId } from '@/lib/utils';
 import {
   InputGroup,
   InputGroupAddon,
@@ -18,11 +19,13 @@ export const Route = createFileRoute('/rooms/')({
 })
 
 function RoomsComponent() {
-	const [rooms, setRooms] = useState<RoomSummary[]>([]);
 	const navigate = useNavigate({from: '/rooms/'})
+	const [rooms, setRooms] = useState<RoomSummary[]>([]);
 
 	const joinGame = (roomId: RoomSummary['id']) => () => {
-		navigate({ to: '/rooms/$roomId', params: { roomId } });
+		const userId = getOrCreateUserId();
+
+		navigate({ to: '/rooms/$roomId', params: { roomId }, search: { player2: userId } });
 	}
 
 	useEffect(() => {
